@@ -10,7 +10,7 @@ class ProductSchema extends Schema {
       table.string('name', 100)
       table.text('description')
       table.decimal('price', 12, 2)
-      table.integer('image-id').unsigned()
+      table.integer('image_id').unsigned()
       table.timestamps()
 
       table
@@ -40,7 +40,7 @@ class ProductSchema extends Schema {
 
     this.create('category_product', (table) => {
       table.increments()
-      table.integer('product-id').unsigned()
+      table.integer('product_id').unsigned()
       table.integer('category_id').unsigned()
 
       table

@@ -8,7 +8,7 @@ class OrderSchema extends Schema {
     this.create('orders', (table) => {
       table.increments()
       table.decimal('total', 12,2).defaultTo(0.0)
-      table.integer('user_id')
+      table.integer('user_id').unsigned()
       table.enu('status', [
         'pending',
         'paid',
