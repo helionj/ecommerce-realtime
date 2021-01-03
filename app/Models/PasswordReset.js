@@ -18,7 +18,7 @@ class PasswordReset extends Model {
     })
   }
 
-  //Formata os valores de datas para o padrão do MySql
+  //Format date values from timestamp  to standard MySql
 
   static get dates(){
     return ['created_at', 'updated_at', 'expires_at']
