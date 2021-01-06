@@ -29,3 +29,11 @@
      description: faker.sentence()
    }
  })
+
+ Factory.blueprint('App/Models/Product', (faker) => {
+   return {
+     name: faker.animal(),
+     description: sentence(),
+     price: faker.floating({min: 10, max: 1000, fixed: 2})
+   }
+ })
