@@ -21,16 +21,16 @@ Route.group(()=>{
   /**
    * Client resource products route
    */
-  Route.get('products', 'ProductController.index').apiOnly()
-  Route.get('product/:id', 'ProductController.show').apiOnly()
+  Route.get('products', 'ProductController.index').apiOnly
+  Route.get('product/:id', 'ProductController.show').apiOnly
 
 
   /**
    * Client resource orders route
    */
-  Route.get('orders', 'OrderController.index').apiOnly()
-  Route.get('orders/id:', 'OrderController.show').apiOnly()
-  Route.post('orders', 'OrderController.store').apiOnly()
-  Route.put('orders/id:', 'OrderController.put').apiOnly()
+  Route.get('orders', 'OrderController.index').apiOnly
+  Route.get('orders/id:', 'OrderController.show').apiOnly
+  Route.post('orders', 'OrderController.store').apiOnly
+  Route.put('orders/id:', 'OrderController.put').apiOnly
 
 }).prefix('v1').namespace('Client')
