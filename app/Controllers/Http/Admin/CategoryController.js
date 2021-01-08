@@ -7,6 +7,8 @@
 /**
  * Resourceful controller for interacting with categories
  */
+
+const Category = use('App/Models/Category')
 class CategoryController {
   /**
    * Show a list of all categories.
@@ -17,7 +19,16 @@ class CategoryController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
+  async index ({ request, response, view, pagination }) {
+
+    const title = request.input('title')
+    const query = Category.query()
+
+    if(title){
+      query.where('title', 'LIKE', `%${title}%`)
+    }
+    const categories = await query.paginate(pagination.page,pagination.limit)
+    return response.send(categories)
   }
 
 
