@@ -84,7 +84,7 @@ class CategoryController {
     const {title, description, image_id} = request.all()
     category.merge({title, description, image_id})
     category.save()
-    return response().send(category)
+    return response.send(category)
 
   }
 
