@@ -7,6 +7,7 @@
 /**
  * Resourceful controller for interacting with products
  */
+const Product = use('App/Models/Product')
 class ProductController {
   /**
    * Show a list of all products.
@@ -17,7 +18,17 @@ class ProductController {
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, view }) {
+  async index ({ request, response, pagination }) {
+
+    const name = request.input('name')
+    const query = Product.query()
+
+    if(name){
+      query.where('name', 'LIKE', `%${name}%`)
+    }
+    const products = await query.paginate(pagination.page,pagination.limit)
+    return response.send(products)
+
   }
 
 
@@ -30,6 +41,16 @@ class ProductController {
    * @param {Response} ctx.response
    */
   async store ({ request, response }) {
+
+    try {
+      const {name, description, price, image_id} = request.all()
+
+      const product = await Product.create( {name, description, price, image_id})
+      response.status(201).send(product)
+    } catch (error) {
+      response.status(400).send({msg: 'Não foi possível criar o produto'})
+    }
+
   }
 
   /**
