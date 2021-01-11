@@ -63,6 +63,14 @@ class ProductController {
    * @param {View} ctx.view
    */
   async show ({ params, request, response, view }) {
+
+    try {
+      const product = await Product.findOrFail(params.id)
+      return response.send(product)
+    } catch (error) {
+      return response.status(500).send({msg: 'Não foi possível localizar o produto'})
+    }
+
   }
 
 
@@ -98,6 +106,15 @@ class ProductController {
    * @param {Response} ctx.response
    */
   async destroy ({ params, request, response }) {
+
+    try {
+      const product = await Product.findOrFail(params.id)
+    product.delete()
+    response.status(204).send({})
+    } catch (error) {
+      response.status(500).send({msg: 'Não foi possível deletar o produto'})
+    }
+
   }
 }
 
