@@ -85,7 +85,7 @@ class ProductController {
    */
   async update ({ params, request, response }) {
 
-    const product = await Category.findOrFail(params.id)
+    const product = await Product.findOrFail(params.id)
     try {
       const {name, description, price, image_id} = request.all()
       product.merge({name, description, price, image_id})
