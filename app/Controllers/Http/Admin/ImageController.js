@@ -10,6 +10,7 @@
 const Image = use('App/Models/Image')
 const {manage_single_upload} = use('App/Helpers')
 const {manage_multiple_uploads} = use('App/Helpers')
+const fs = use('fs')
 
 class ImageController {
   /**
@@ -156,6 +157,24 @@ class ImageController {
    * @param {Response} ctx.response
    */
   async destroy ({ params, request, response }) {
+
+    const image = await Image.findOrFail(params.id)
+
+    try {
+
+      let filePath = Helpers.publicPath(`uploads/${image.path}`)
+
+      await fs.unlink(filePath, error => {
+
+        if(!error){
+
+          await image.delete()
+          return response.status(204).send()
+        }
+      })
+
+    } catch (error) {
+      return status(400).send({msg: "Não foi possível deletar a imagem"})
   }
 }
 
