@@ -115,17 +115,6 @@ class ImageController {
     return response.send(image)
   }
 
-  /**
-   * Render a form to update an existing image.
-   * GET images/:id/edit
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   * @param {View} ctx.view
-   */
-  async edit ({ params, request, response, view }) {
-  }
 
   /**
    * Update image details.
@@ -175,7 +164,8 @@ class ImageController {
 
     } catch (error) {
       return status(400).send({msg: "Não foi possível deletar a imagem"})
+    }
   }
-}
 
+}
 module.exports = ImageController
