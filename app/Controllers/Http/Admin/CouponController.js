@@ -109,7 +109,7 @@ class CouponController {
 
     } catch (error) {
 
-      trx.rollback()
+      await trx.rollback()
       return response.status(400).send({msg: 'Não foi possível criar o cupom'})
     }
   }
@@ -151,6 +151,62 @@ class CouponController {
    * @param {Response} ctx.response
    */
   async update ({ params, request, response }) {
+
+    const trx = await Database.beginTransaction()
+    const coupon = await Coupon.findOrFail(params.id)
+
+    var can_use_for ={
+      client: false,
+      product: false
+    }
+
+    try {
+
+    const couponData = request.only([
+      'code',
+      'discount',
+      'valid_form',
+      'valid_until',
+      'quantity',
+      'type',
+      'recursive'
+    ])
+
+    coupon.merge(couponData)
+
+
+    const {users, products} = request.only(['users', 'products'])
+    const service = new Service(coupon, trx)
+
+    if(users && users.length > 0){
+      await service.syncUsers(users)
+      can_use_for.client = true
+    }
+
+    if(products && products.length > 0){
+      await service.syncProducts(products)
+      can_use_for.product =true
+    }
+
+    if(can_use_for.product && can_use_for.client){
+      coupon.can_use_for = 'product_client'
+    }else if(can_use_for.product && !can_use_for.client){
+      coupon.can_use_for = 'product'
+    }else if(!can_use_for.product && can_use_for.client){
+      coupon.can_use_for = 'client'
+    }else{
+      coupon_use_for = 'all'
+    }
+
+    await coupon.save(trx)
+    await trx.commit()
+    return response.send(coupon)
+    } catch (error) {
+
+      await trx.rollback()
+      return response.status(400).send({msg: "Não foi possível atualizar o cupom"})
+    }
+
   }
 
   /**

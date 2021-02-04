@@ -2,7 +2,7 @@
 
 const Order = require('../Order')
 
-const OrderHook = exports = module.exports = {}
+const OrderHook = (exports = module.exports = {})
 
 OrderHook.updateValues = async (model) => {
   model.$sideLoaded.subtotal =await model.items().getSum('subtotal')
@@ -11,9 +11,9 @@ OrderHook.updateValues = async (model) => {
   model.total = model.$sideLoaded.subtotal - model.$sideLoaded.discount
 }
 
-OrderHook.updateCollectionValues = async orders => {
+OrderHook.updateCollectionValues = async models => {
 
-  orders.forEach(order => {
-    order = await OrderHook.updateValues(order)
-  });
+  for(let model of models){
+    model = await OrderHook.updateValues(model)
+  }
 }

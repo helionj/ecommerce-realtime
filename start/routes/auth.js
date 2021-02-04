@@ -4,12 +4,12 @@
 const Route = use('Route')
 
 Route.group(()=>{
-  Route.post('register', 'AuthController.register').as('auth.register')
-  Route.post('login', 'AuthController.login').as('auth.login')
-  Route.post('logout', 'AuthController.logout').as('auth.logout')
-  Route.post('refresh', 'AuthController.refresh').as('auth.refresh')
+  Route.post('register', 'AuthController.register').as('auth.register').middleware(['guest']).validator('Auth/Register')
+  Route.post('login', 'AuthController.login').as('auth.login').middleware(['guest']).validator('Auth/Login')
+  Route.post('logout', 'AuthController.logout').as('auth.logout').middleware(['auth'])
+  Route.post('refresh', 'AuthController.refresh').as('auth.refresh').middleware(['guest'])
 
-  Route.post('reset-password', 'AuthController.forgot').as('auth.forgot')
-  Route.get('reset-password', 'AuthController.remember').as('auth.remember')
-  Route.put('reset-password', 'AuthController.reset').as('auth.reset')
+  Route.post('reset-password', 'AuthController.forgot').as('auth.forgot').middleware(['guest'])
+  Route.get('reset-password', 'AuthController.remember').as('auth.remember').middleware(['guest'])
+  Route.put('reset-password', 'AuthController.reset').as('auth.reset').middleware(['guest'])
 }).prefix('v1/auth').namespace('Auth')
