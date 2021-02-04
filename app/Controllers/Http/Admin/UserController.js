@@ -8,6 +8,7 @@
  * Resourceful controller for interacting with users
  */
 const User = use('App/Models/User')
+const Transformer = use('App/Transformers/Admin/UserTransformer')
  class UserController {
   /**
    * Show a list of all users.
@@ -18,7 +19,7 @@ const User = use('App/Models/User')
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async index ({ request, response, pagination}) {
+  async index ({ request, response, pagination, transform}) {
 
     const name = request.input('name')
     const query = User.query()
@@ -30,7 +31,8 @@ const User = use('App/Models/User')
     }
 
     try {
-      const users = await query.paginate(pagination.page, pagination.limit)
+      var users = await query.paginate(pagination.page, pagination.limit)
+      users = await transform.paginate(users, Transformer)
       return response.send(users)
     } catch (error) {
       return response.status(500).send({msg: "Não foi possível encontrar o usuário"})
@@ -47,11 +49,12 @@ const User = use('App/Models/User')
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store ({ request, response }) {
+  async store ({ request, response, transform }) {
 
     try {
       const userData = request.only(['name', 'surname', 'email', 'password', 'image_id'])
-      const user = await User.create(userData)
+      var user = await User.create(userData)
+      user = await transform.item(user, Transformer)
       return response.status(201).send(user)
     } catch (error) {
       return response.status(400).send({msg: 'Não foi possível criar o usuário'})
@@ -68,10 +71,11 @@ const User = use('App/Models/User')
    * @param {Response} ctx.response
    * @param {View} ctx.view
    */
-  async show ({ params, request, response }) {
+  async show ({ params, request, response, transform }) {
 
     try {
-      const user = await User.findOrFail(params.id)
+      var user = await User.findOrFail(params.id)
+      user = await transform.item(user, Transformer)
       return response.send(user)
     } catch (error) {
       return response.status(500).send({msg: 'Não foi possível localizar o usuário'})
@@ -89,11 +93,12 @@ const User = use('App/Models/User')
    */
   async update ({ params, request, response }) {
 
-    const user = await User.findOrFail(params.id)
+    var user = await User.findOrFail(params.id)
     try {
       const {name, surname, email, password, image_id} = request.all()
       user.merge({name, surname, email, password, image_id})
       user.save()
+      user = await transform.item(user, Transformer)
       return response.send(user)
     } catch (error) {
       return response.status(400).send({msg: 'Não foi possível atualizar o produto'})
