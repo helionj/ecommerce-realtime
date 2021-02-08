@@ -8,7 +8,7 @@
  * Resourceful controller for interacting with products
  */
 const Product = use('App/Models/Product')
-const Transformer = use('App/Transformes/Admin/ProductTransformer')
+const Transformer = use('App/Transformers/Admin/ProductTransformer')
 class ProductController {
   /**
    * Show a list of all products.

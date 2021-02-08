@@ -12,15 +12,15 @@ class OrderItem extends Model {
   }
 
   static get traits () {
-    return ['App/Traits/NoTimeStamp']
+    return ['App/Models/Traits/NoTimestamp']
   }
 
   product(){
-    this.belongsTo('App/Models/Product')
+    return this.belongsTo('App/Models/Product')
   }
 
   order(){
-    this.belongsTo('App/Models/Order')
+    return this.belongsTo('App/Models/Order')
   }
 }
 

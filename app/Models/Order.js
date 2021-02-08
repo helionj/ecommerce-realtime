@@ -13,11 +13,11 @@ class Order extends Model {
   }
 
   items(){
-    return this.hasMany('App/Model/OrderItem')
+    return this.hasMany('App/Models/OrderItem')
   }
 
   coupons() {
-    return this.belongsToMany('App/Model/Coupon')
+    return this.belongsToMany('App/Models/Coupon')
   }
 
   discounts() {
@@ -25,7 +25,7 @@ class Order extends Model {
   }
 
   user() {
-    return this.belongsTo('App/Model/User', 'user_id', 'id')
+    return this.belongsTo('App/Models/User', 'user_id', 'id')
   }
 }
 

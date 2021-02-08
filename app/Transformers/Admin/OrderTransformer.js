@@ -1,10 +1,10 @@
 'use strict'
 
 const BumblebeeTransformer = use('Bumblebee/Transformer')
-const UserTransformer = use('App/Transformer/Admin/UserTransformer')
-const OrderItemTransformer = use('App/Transformer/Admin/OrderItemTransformer')
-const CouponTransformer = use('App/Transformer/Admin/CouponTransformer')
-const DiscountTransformer = use('App/Transformer/Admin/DiscountTransformer')
+const UserTransformer = use('App/Transformers/Admin/UserTransformer')
+const OrderItemTransformer = use('App/Transformers/Admin/OrderItemTransformer')
+const CouponTransformer = use('App/Transformers/Admin/CouponTransformer')
+const DiscountTransformer = use('App/Transformers/Admin/DiscountTransformer')
 
 /**
  * OrderTransformer class
@@ -27,9 +27,9 @@ class OrderTransformer extends BumblebeeTransformer {
      status: order.status,
      total: order.total ? parseFloat(order.total.toFixed(2)) : 0,
      date: order.created_at,
-     qty_items: order.__meta && order.__meta.qty_items ? order.__meta.qty_items : 0,
-     discount: order.__meta && order.__meta.discount ? order.__meta.discount : 0,
-     subtotal: order.__meta && order.__meta.subtotal ? order.__meta.subtotal : 0
+     qty_items: order.__meta__ && order.__meta__.qty_items ? order.__meta__.qty_items : 0,
+     discount: order.__meta__ && order.__meta__.discount ? order.__meta__.discount : 0,
+     subtotal: order.__meta__ && order.__meta__.subtotal ? order.__meta__.subtotal : 0
 
     }
   }
@@ -39,15 +39,17 @@ class OrderTransformer extends BumblebeeTransformer {
   }
 
   includeItems(order){
-    return this.item(order.getRelated('items'), OrderItemTransformer)
+
+    return this.collection(order.getRelated('items'), OrderItemTransformer)
+
   }
 
   includeCoupons(order){
-    return this.item(order.getRelated('coupons'), CouponTransformer)
+    return this.collection(order.getRelated('coupons'), CouponTransformer)
   }
 
   includeDiscounts(order){
-    return this.item(order.getRelated('discounts'), DiscountTransformer)
+    return this.collection(order.getRelated('discounts'), DiscountTransformer)
   }
 }
 

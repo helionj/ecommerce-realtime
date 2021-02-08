@@ -27,8 +27,8 @@ class ProductTransformer extends BumblebeeTransformer {
     }
   }
 
-  includeImage(model) {
-    return this.item(model.getRelated('image'), ImageTransformer)
+  includeImage(product) {
+    return this.item(product.getRelated('image'), ImageTransformer)
   }
 }
 

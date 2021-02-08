@@ -2,8 +2,8 @@
 
 const BumblebeeTransformer = use('Bumblebee/Transformer')
 const UserTransformer = use('App/Transformers/Admin/UserTransformer')
-const ProductTransformer = use('App/Transformer/User/ProductTransformer')
-const OrderTransformer = use('App/Transformer/User/OrderTransformer')
+const ProductTransformer = use('App/Transformers/Admin/ProductTransformer')
+const OrderTransformer = use('App/Transformers/Admin/OrderTransformer')
 
 /**
  * CouponTransformer class

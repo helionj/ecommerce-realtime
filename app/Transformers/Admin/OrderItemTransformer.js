@@ -29,7 +29,7 @@ class OrderItemTransformer extends BumblebeeTransformer {
   }
 
   includeProduct(orderItem){
-    this.item(orderItem.getRelated('product'), ProductTransformer)
+    return this.item(orderItem.getRelated('product'), ProductTransformer)
   }
 }
 

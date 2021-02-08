@@ -15,7 +15,7 @@ const Discount = require('../../../Models/Discount')
 const Order = use('App/Models/Order')
 const Database = use('Database')
 const Service = use('App/Services/Order/OrderService')
-const Transformer = use('App/Transformers/Admin/OrderTransformers')
+const Transformer = use('App/Transformers/Admin/OrderTransformer')
 //const Coupon = use('App/Models/Coupon')
 
 class OrderController {
@@ -76,14 +76,21 @@ class OrderController {
 
     try {
       const {user_id, items, status} = request.all()
-      var order = Order.create({user_id, status}, trx)
+      var order = await Order.create({user_id, status}, trx)
       const service = new Service(order, trx)
       if(items && items.length > 0){
         await service.syncItems(items)
       }
       await trx.commit()
-      order = await transform.item(order, Transformer)
+
+      //busca o pedido na base de dados para disparar o hook para calculo de total
+      order = await Order.find(order.id)
+
+
+      order = await transform.include('user, items').item(order, Transformer)
       return response.status(201).send(order)
+
+
 
     } catch (error) {
         return response.status(400).send({msg: 'Não foi possível criar o pedido'})

@@ -15,7 +15,7 @@ class Discount extends Model {
   }
 
   static get table(){
-    return 'coupon-order'
+    return 'coupon_order'
   }
 
   order(){
